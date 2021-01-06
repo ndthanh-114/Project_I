@@ -40,7 +40,7 @@ public class Tetris extends JPanel {
 	public Board board;
 	public BallBg ballBg;
 	public EndGame endGame;
-	ChangeLevel changeLevel;
+	public ChangeLevel changeLevel;
 	public static boolean isIntro = true;
 
 	public Tetris() {
@@ -54,12 +54,12 @@ public class Tetris extends JPanel {
 		isGameOver = false;
 		this.setPreferredSize(new Dimension(PANEL_WIDTH_GAME, PANEL_HEIGHt_GAME));
 		intro = new Intro();
-		ballBg = new BallBg();
+		ballBg = new BallBg(this);
 		board = new Board(this);
 		board.start();
 		side = new Side(board);
 		changeLevel = new ChangeLevel(this);
-		endGame = new EndGame();
+		endGame = new EndGame(this);
 		this.setFocusable(true);
 		this.addMouseListener(new EffectEndGame(this.endGame, this));
 		this.addMouseMotionListener(new Effect2(this.endGame));

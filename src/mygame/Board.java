@@ -74,6 +74,8 @@ public class Board implements ActionListener, MyColor {
 
 	private int ghostCurX;
 
+	private boolean isGhost = true;
+
 	private MyShape[] board;
 
 	private Tetris tetris;
@@ -174,32 +176,34 @@ public class Board implements ActionListener, MyColor {
 				}
 			}
 			// draw ghostPiece
-			ghostPiece = new Shape();
-			ghostPiece = curPiece;
-			Color base = colors[curPiece.getShape().ordinal()];
-			base = new Color(base.getRed(), base.getGreen(), base.getBlue(), 30);
-			ghostCurY = curY;
-			ghostCurX = curX;
-			int newGhostY = ghostCurY;
+			if (isGhost) {
+				ghostPiece = new Shape();
+				ghostPiece = curPiece;
+				Color base = colors[curPiece.getShape().ordinal()];
+				base = new Color(base.getRed(), base.getGreen(), base.getBlue(), 30);
+				ghostCurY = curY;
+				ghostCurX = curX;
+				int newGhostY = ghostCurY;
 
-			while (newGhostY > 0) {
+				while (newGhostY > 0) {
 
-				if (!tryMoveGhost(ghostPiece, ghostCurX, newGhostY - 1)) {
+					if (!tryMoveGhost(ghostPiece, ghostCurX, newGhostY - 1)) {
 
-					break;
+						break;
+					}
+
+					newGhostY--;
 				}
+				// draw ghostPiece
+				if (ghostPiece.getShape() != MyShape.NoShape) {
 
-				newGhostY--;
-			}
-			// draw ghostPiece
-			if (ghostPiece.getShape() != MyShape.NoShape) {
+					for (int i = 0; i < 4; i++) {
 
-				for (int i = 0; i < 4; i++) {
-
-					int x = ghostCurX + ghostPiece.x(i);
-					int y = newGhostY - ghostPiece.y(i);
-					drawSquareGhost(g, x * TILE_SIZE, boardTop + (BOARD_HEIGHT - y - 1) * TILE_SIZE,
-							ghostPiece.getShape(), base);
+						int x = ghostCurX + ghostPiece.x(i);
+						int y = newGhostY - ghostPiece.y(i);
+						drawSquareGhost(g, x * TILE_SIZE, boardTop + (BOARD_HEIGHT - y - 1) * TILE_SIZE,
+								ghostPiece.getShape(), base);
+					}
 				}
 			}
 
@@ -259,6 +263,7 @@ public class Board implements ActionListener, MyColor {
 
 		Board.level = 0;
 		this.numLinesRemoved = 0;
+		isGhost = true;
 		this.beforeTime = 0;
 		this.curTime = 0;
 		if (timer != null) {
@@ -266,6 +271,7 @@ public class Board implements ActionListener, MyColor {
 			this.timer.setInitialDelay(INIT_DELAY);
 			this.timer.setDelay(DELAY);
 		}
+		newPiece();
 	}
 
 	public void pieceDropped() {
@@ -500,6 +506,14 @@ public class Board implements ActionListener, MyColor {
 
 	public void setIsPaused(boolean isPaused) {
 		this.isPaused = isPaused;
+	}
+
+	public boolean getIsGhost() {
+		return isGhost;
+	}
+
+	public void setIsGhost(boolean isGhost) {
+		this.isGhost = isGhost;
 	}
 
 }

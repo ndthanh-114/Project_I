@@ -4,129 +4,139 @@ import java.util.Random;
 
 public class Shape {
 
-    public enum MyShape { NoShape, ZShape, SShape, LineShape,
-        TShape, SquareShape, LShape, MirroredLShape }
+	public enum MyShape {
+		NoShape, ZShape, SShape, LineShape, TShape, SquareShape, LShape, MirroredLShape
+	}
 
-    public MyShape pieceShape;
-    private int coords[][];
-    private int[][][] coordsTable;
+	public MyShape pieceShape;
+	private int coords[][];
+	private int[][][] coordsTable;
 
+	public Shape() {
 
-    public Shape() {
+		initShape();
+	}
 
-        initShape();
-    }
+	private void initShape() {
 
-    private void initShape() {
+		coords = new int[4][2];
 
-        coords = new int[4][2];
+		coordsTable = new int[][][] { { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } },
+				{ { 0, -1 }, { 0, 0 }, { -1, 0 }, { -1, 1 } }, // Z
+				{ { 0, -1 }, { 0, 0 }, { 1, 0 }, { 1, 1 } }, // S
+				{ { 0, -1 }, { 0, 0 }, { 0, 1 }, { 0, 2 } }, // Line
+				{ { -1, 0 }, { 0, 0 }, { 1, 0 }, { 0, 1 } }, // T
+				{ { 0, 0 }, { 1, 0 }, { 0, 1 }, { 1, 1 } }, // Square
+				{ { -1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 } }, { { 1, -1 }, { 0, -1 }, { 0, 0 }, { 0, 1 } }// Mirror
+		};
 
-        coordsTable = new int[][][] {
-                { { 0, 0 },   { 0, 0 },   { 0, 0 },   { 0, 0 } },
-                { { 0, -1 },  { 0, 0 },   { -1, 0 },  { -1, 1 } },//Z
-                { { 0, -1 },  { 0, 0 },   { 1, 0 },   { 1, 1 } },//S
-                { { 0, -1 },  { 0, 0 },   { 0, 1 },   { 0, 2 } },//Line
-                { { -1, 0 },  { 0, 0 },   { 1, 0 },   { 0, 1 } },//T
-                { { 0, 0 },   { 1, 0 },   { 0, 1 },   { 1, 1 } },//Square
-                { { -1, -1 }, { 0, -1 },  { 0, 0 },   { 0, 1 } },
-                { { 1, -1 },  { 0, -1 },  { 0, 0 },   { 0, 1 } }//Mirror
-        };
-
-        setShape(MyShape.NoShape);
-    }
+		setShape(MyShape.NoShape);
+	}
 
 //    protected enum MyShape { NoShape, ZShape, SShape, LineShape,
 //        TShape, SquareShape, LShape, MirroredLShape }
-    
-    protected void setShape(MyShape shape) {
 
-        for (int i = 0; i < 4 ; i++) {
+	protected void setShape(MyShape shape) {
 
-            for (int j = 0; j < 2; ++j) {
+		for (int i = 0; i < 4; i++) {
 
-                coords[i][j] = coordsTable[shape.ordinal()][i][j];
-            }
-        }
+			for (int j = 0; j < 2; ++j) {
 
-        pieceShape = shape;
-    }
+				coords[i][j] = coordsTable[shape.ordinal()][i][j];
+			}
+		}
 
-    private void setX(int index, int x) { coords[index][0] = x; }
-    private void setY(int index, int y) { coords[index][1] = y; }
-    public int x(int index) { return coords[index][0]; }
-    public int y(int index) { return coords[index][1]; }
-    public MyShape getShape()  { return pieceShape; }
+		pieceShape = shape;
+	}
 
-    public void setRandomShape() {
+	private void setX(int index, int x) {
+		coords[index][0] = x;
+	}
 
-        var r = new Random();
-        int x = Math.abs(r.nextInt()) % 7 + 1;
+	private void setY(int index, int y) {
+		coords[index][1] = y;
+	}
 
-        MyShape[] values = MyShape.values();
-        setShape(values[x]);
-    }
+	public int x(int index) {
+		return coords[index][0];
+	}
 
-    public int minX() {
+	public int y(int index) {
+		return coords[index][1];
+	}
 
-        int m = coords[0][0];
+	public MyShape getShape() {
+		return pieceShape;
+	}
 
-        for (int i=0; i < 4; i++) {
+	public void setRandomShape() {
 
-            m = Math.min(m, coords[i][0]);
-        }
+		var r = new Random();
+		int x = Math.abs(r.nextInt()) % 7 + 1;
 
-        return m;
-    }
+		MyShape[] values = MyShape.values();
+		setShape(values[x]);
+	}
 
+	public int minX() {
 
-    public int minY() {
+		int m = coords[0][0];
 
-        int m = coords[0][1];
+		for (int i = 0; i < 4; i++) {
 
-        for (int i=0; i < 4; i++) {
+			m = Math.min(m, coords[i][0]);
+		}
 
-            m = Math.min(m, coords[i][1]);
-        }
+		return m;
+	}
 
-        return m;
-    }
+	public int minY() {
 
-    public Shape rotateLeft() {
+		int m = coords[0][1];
 
-        if (pieceShape == MyShape.SquareShape) {
+		for (int i = 0; i < 4; i++) {
 
-            return this;
-        }
+			m = Math.min(m, coords[i][1]);
+		}
 
-        var result = new Shape();
-        result.pieceShape = pieceShape;
+		return m;
+	}
 
-        for (int i = 0; i < 4; ++i) {
+	public Shape rotateLeft() {
 
-            result.setX(i, y(i));
-            result.setY(i, -x(i));
-        }
+		if (pieceShape == MyShape.SquareShape) {
 
-        return result;
-    }
+			return this;
+		}
 
-    public Shape rotateRight() {
+		var result = new Shape();
+		result.pieceShape = pieceShape;
 
-        if (pieceShape == MyShape.SquareShape) {
+		for (int i = 0; i < 4; ++i) {
 
-            return this;
-        }
+			result.setX(i, y(i));
+			result.setY(i, -x(i));
+		}
 
-        var result = new Shape();
-        result.pieceShape = pieceShape;
+		return result;
+	}
 
-        for (int i = 0; i < 4; ++i) {
+	public Shape rotateRight() {
 
-            result.setX(i, -y(i));
-            result.setY(i, x(i));
-        }
+		if (pieceShape == MyShape.SquareShape) {
 
-        return result;
-    }
+			return this;
+		}
+
+		var result = new Shape();
+		result.pieceShape = pieceShape;
+
+		for (int i = 0; i < 4; ++i) {
+
+			result.setX(i, -y(i));
+			result.setY(i, x(i));
+		}
+
+		return result;
+	}
 }
-
