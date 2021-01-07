@@ -54,7 +54,7 @@ public class EndGame implements ActionListener {
 		timer = new Timer(100, this);
 
 		color1 = new Color(0, 0, 0, alpha2);
-		color2 = new Color(0, 0, 255, alpha);
+		color2 = new Color(100, 0, 75, alpha);
 		color3 = new Color(0, 0, 255, 140);
 		color4 = new Color(0, 0, 255, 140);
 		rectNewGame = new Rectangle2D.Float();
@@ -145,14 +145,14 @@ public class EndGame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		alpha += 5;
+		alpha += 10;
 		alpha2 += 0.1f;
-		if (alpha > 200)
-			alpha = 200;
+		if (alpha > 250)
+			alpha = 250;
 		if (alpha2 > 0.6f)
 			alpha2 = 0.6f;
 		color1 = new Color(0, 0, 0, alpha2);
-		color2 = new Color(0, 0, 255, alpha);
+		color2 = new Color(100, 0, 75, alpha);
 		y++;
 		if (y > 60)
 			y = 60;

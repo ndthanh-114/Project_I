@@ -177,7 +177,7 @@ public class Tetris extends JPanel {
 	public static void main(String[] args) {
 
 		var game = new Tetris();
-		JFrame j = new JFrame("Hello");
+		JFrame j = new JFrame("Tetris");
 		j.add(game);
 
 		j.pack();
