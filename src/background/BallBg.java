@@ -8,6 +8,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
 import mygame.Tetris;
@@ -26,18 +35,41 @@ public class BallBg implements ActionListener{
 	Tetris tetris;
 	public Timer timer;
 	private int DELAY = 10;
-
+	private BufferedImage bufBackground;
 	public BallBg(Tetris t) {
 		tetris = t;
 		ellip = new Ellipse2D.Double();
 		alpha = 40;
 		color = new Color(255, 255, 254, alpha);
 		timer = new Timer(DELAY, this);
+		loadImage();
 		this.tetris.addMouseWheelListener(new ScaleHandler());
 	}
+	private void loadImage() {
+		bufBackground = new BufferedImage(Tetris.PANEL_WIDTH_GAME, Tetris.PANEL_HEIGHt_GAME,
+				BufferedImage.TYPE_BYTE_GRAY);
+		try {
+			bufBackground = ImageIO.read(new File("data/background_game.jpg"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		float[] blurKernel = { 1 / 13f, 1 / 13f, 1 / 13f, 1 / 13f, 1 / 13f, 1 / 13f, 1 / 13f, 1 / 13f, 1 / 13f };
 
+		BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
+		bufBackground = blur.filter(bufBackground,
+				new BufferedImage(bufBackground.getWidth(), bufBackground.getHeight(), bufBackground.getType()));
+	}
 	public void doDrawing(Graphics2D g) {
 		if (isBg) {
+			Graphics2D g2d=(Graphics2D)g.create();
+			
+			g2d.clip(new Ellipse2D.Double(x, y, R, R));
+	        g2d.drawImage(bufBackground, 0, 0, null); 
+			
+			g2d.dispose();
+			
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			g.setColor(color.brighter());
@@ -49,6 +81,10 @@ public class BallBg implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {
 		if (isBg) {
+			if(getY()+getR()>=Tetris.PANEL_HEIGHt_GAME&&getX()+getR()>=Tetris.PANEL_WIDTH_GAME)
+				setR(200);
+			if(getR()<50)
+				setR(50);
 			reset();
 			checkChange();
 		}
@@ -133,8 +169,9 @@ public class BallBg implements ActionListener{
 
 	class ScaleHandler implements MouseWheelListener{
 		public void mouseWheelMoved(MouseWheelEvent e) {
-			if(!Tetris.isIntro&&!Tetris.isGameOver&&!getChange()&& getX() >0 &&getY()>0 && getX()+getR()<Tetris.PANEL_WIDTH_GAME
-					&& getY()+getR()<Tetris.PANEL_HEIGHt_GAME) {
+			if(!Tetris.isIntro&&!Tetris.isGameOver&&!getChange()&& getX() >0 &&getY()>0 && getX()+getR()<=Tetris.PANEL_WIDTH_GAME
+					&& getY()+getR()<=Tetris.PANEL_HEIGHt_GAME) {
+				
 				doScale(e);
 			}
 	    }
@@ -149,8 +186,8 @@ public class BallBg implements ActionListener{
 	            if (getEllip().contains(x, y)) {
 	                 
 	                float amount =  e.getWheelRotation() * 5f;
-	                setR(getR()+amount);
-	                System.out.println("Cham");
+	                setR(getR()-amount);
+	               
 	            }
 	        }            
 	    }
