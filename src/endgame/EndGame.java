@@ -114,6 +114,8 @@ public class EndGame implements ActionListener {
 		int stringWidth = fm.stringWidth(gameOver);
 
 		g2d.drawString(gameOver, (Tetris.PANEL_WIDTH_GAME - stringWidth) / 2, Tetris.PANEL_HEIGHt_GAME / 2 - (120 - y));
+		
+
 		g2d.dispose();
 
 		Graphics2D gd = (Graphics2D) g.create();
@@ -146,10 +148,6 @@ public class EndGame implements ActionListener {
 		gd.fill(rectQuitGame);
 		gd.dispose();
 		
-//		Graphics2D gb6 = (Graphics2D)g.create();
-//        gb6.drawImage(bufimg, 0, 0, null);
-//        System.out.println("Da toi");
-//        gb6.dispose();
 	}
 
 	@Override
