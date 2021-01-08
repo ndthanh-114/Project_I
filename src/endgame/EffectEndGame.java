@@ -19,7 +19,7 @@ public class EffectEndGame extends MouseAdapter {
 	public void mousePressed(MouseEvent e) {
 		double x = e.getX();
 		double y = e.getY();
-		if (endGame.getRectNewGame().contains(x, y)) {
+		if (endGame.getRectNewGame().contains(x, y)&&Tetris.isGameOver) {
 			Tetris.isNewGame = true;
 			Tetris.isGameOver = false;
 			endGame.timer.stop();
@@ -29,7 +29,7 @@ public class EffectEndGame extends MouseAdapter {
 			endGame.tetris.changeLevel.setColorElipSlGhost(new Color(0, 0, 0));
 			endGame.tetris.ballBg.setIsBg(true);
 		}
-		if (endGame.getRectQuitGame().contains(x, y)) {
+		if (endGame.getRectQuitGame().contains(x, y)&&Tetris.isGameOver) {
 			System.exit(0);
 		}
 	}

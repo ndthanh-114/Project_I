@@ -23,7 +23,7 @@ public class Intro implements ActionListener {
 
 	Timer timer;
 
-	BufferedImage bufBackground;
+	private BufferedImage bufBackground;
 	public EffectSimple effect;
 	private String str = "Tetris";
 	private int size;
@@ -174,5 +174,4 @@ public class Intro implements ActionListener {
 	public void setRectQuitGame(Rectangle2D rectQuitGame) {
 		this.rectQuitGame = rectQuitGame;
 	}
-
 }

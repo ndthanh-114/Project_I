@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 public class Board implements ActionListener, MyColor {
 
 	public static int DELAY = 1000;
+	
+	private static int MIN_DELAY=200;
 
 	private static final int BORDER_WIDTH = 5;
 
@@ -22,7 +24,7 @@ public class Board implements ActionListener, MyColor {
 	private static final int VISIBLE_HEIGHT_COUNT = 20;
 
 	// The number of hidden rows on the board
-	private static int HIDDEN_HEIGHT_COUNT = 3;
+	private static final int HIDDEN_HEIGHT_COUNT = 3;
 
 	public static final int BOARD_HEIGHT = VISIBLE_HEIGHT_COUNT + HIDDEN_HEIGHT_COUNT;
 
@@ -94,7 +96,6 @@ public class Board implements ActionListener, MyColor {
 	}
 
 	private MyShape shapeAt(int x, int y) {
-
 		return board[(y * BOARD_WIDTH) + x];
 	}
 
@@ -122,7 +123,7 @@ public class Board implements ActionListener, MyColor {
 	public void setChangeUpLevel() {
 		this.curTime = 0;
 		this.beforeTime = 0;
-		if (Board.DELAY > 500 && level >= 0) {
+		if (Board.DELAY > MIN_DELAY && level >= 0) {
 			Board.DELAY -= 50;
 			level += 1;
 			timer.setDelay(DELAY);
@@ -383,7 +384,6 @@ public class Board implements ActionListener, MyColor {
 			if (lineIsFull) {
 
 				numFullLines++;
-
 				for (int k = i; k < BOARD_HEIGHT - 1; k++) {
 					for (int j = 0; j < BOARD_WIDTH; j++) {
 						board[(k * BOARD_WIDTH) + j] = shapeAt(j, k + 1);
@@ -455,9 +455,8 @@ public class Board implements ActionListener, MyColor {
 	private void checkLevel() {
 
 		if (curTime - beforeTime > 15 && !this.isPaused) {
-			if (Board.DELAY > 500) {
+			if (Board.DELAY > MIN_DELAY) {
 				Board.DELAY -= 50;
-				Board.HIDDEN_HEIGHT_COUNT += 2;
 				level += 1;
 				beforeTime = curTime;
 				timer.setDelay(DELAY);

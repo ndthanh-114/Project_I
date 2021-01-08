@@ -14,17 +14,17 @@ public class Effect2 extends MouseMotionAdapter{
 			double y=e.getY();
 				
 			if(endGame2.getRectNewGame().contains(x, y)) {
-				endGame2.setColor3(Color.red);
+				endGame2.setColor3(Color.yellow);
 			}
 			else {
-				endGame2.setColor3(new Color(0,0,255,140));
+				endGame2.setColor3(new Color(240, 240, 240,180));
 				
 			}
 			if(endGame2.getRectQuitGame().contains(x, y)) {
-				endGame2.setColor4(Color.red);
+				endGame2.setColor4(Color.yellow);
 		
 			}else {
-				endGame2.setColor4(new Color(0,0,255,140));
+				endGame2.setColor4(new Color(240, 240, 240,180));
 			}
 		}
 	}

@@ -44,10 +44,10 @@ public class Tetris extends JPanel {
 	public static boolean isIntro = true;
 
 	public Tetris() {
-		initUI();
+		initGame();
 	}
 
-	private void initUI() {
+	private void initGame() {
 
 		this.setBackground(Color.black);
 		isNewGame = true;
@@ -73,7 +73,7 @@ public class Tetris extends JPanel {
 				if (intro.getRectNewGame().contains(x, y)) {
 					isIntro = false;
 				}
-				if (intro.getRectQuitGame().contains(x, y)) {
+				if (intro.getRectQuitGame().contains(x, y)&&Tetris.isIntro) {
 					System.exit(0);
 				}
 			}
@@ -156,7 +156,6 @@ public class Tetris extends JPanel {
 
 			int keycode = e.getKeyCode();
 
-			// Java 12 switch expressions
 			if (!isIntro) {
 				switch (keycode) {
 

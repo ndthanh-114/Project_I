@@ -8,8 +8,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.io.File;
@@ -54,9 +55,9 @@ public class EndGame implements ActionListener {
 		timer = new Timer(100, this);
 
 		color1 = new Color(0, 0, 0, alpha2);
-		color2 = new Color(100, 0, 75, alpha);
-		color3 = new Color(0, 0, 255, 140);
-		color4 = new Color(0, 0, 255, 140);
+		color2 = new Color(240, 240, 240, alpha);
+		color3 = new Color(240, 240, 240, 180);
+		color4 = new Color(240, 240, 240, 180);
 		rectNewGame = new Rectangle2D.Float();
 		rectQuitGame = new Rectangle2D.Float();
 //		this.setPreferredSize(new Dimension(Tetris.PANEL_WIDTH_GAME, Tetris.PANEL_HEIGHt_GAME));
@@ -75,11 +76,16 @@ public class EndGame implements ActionListener {
 
 	private void createBlurredImage() {
 
-		float[] blurKernel = { 1 / 10f, 1 / 10f, 1 / 10f, 1 / 10f, 1 / 10f, 1 / 10f, 1 / 10f, 1 / 10f, 1 / 10f };
+		float[] blurKernel = { 1 / 11f, 1 / 11f, 1 / 11f, 1 / 11f, 1 / 11f, 1 / 11f, 1 / 11f, 1 / 11f, 1 / 11f };
 
 		BufferedImageOp blur = new ConvolveOp(new Kernel(3, 3, blurKernel));
 		bluri = blur.filter(bufBackground,
 				new BufferedImage(bufBackground.getWidth(), bufBackground.getHeight(), bufBackground.getType()));
+
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-bluri.getWidth(null), 0);
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		bluri = op.filter(bluri, null);
 	}
 
 	public void initEndGame() {
@@ -87,7 +93,7 @@ public class EndGame implements ActionListener {
 		alpha2 = 0f;
 		y = 0;
 	}
-
+	
 //	public void paintComponent(Graphics g) {
 //		super.paintComponent(g);
 //		doDrawing(g);
@@ -108,7 +114,6 @@ public class EndGame implements ActionListener {
 		int stringWidth = fm.stringWidth(gameOver);
 
 		g2d.drawString(gameOver, (Tetris.PANEL_WIDTH_GAME - stringWidth) / 2, Tetris.PANEL_HEIGHt_GAME / 2 - (120 - y));
-
 		g2d.dispose();
 
 		Graphics2D gd = (Graphics2D) g.create();
@@ -140,6 +145,11 @@ public class EndGame implements ActionListener {
 				stringWidth2, 30);
 		gd.fill(rectQuitGame);
 		gd.dispose();
+		
+//		Graphics2D gb6 = (Graphics2D)g.create();
+//        gb6.drawImage(bufimg, 0, 0, null);
+//        System.out.println("Da toi");
+//        gb6.dispose();
 	}
 
 	@Override
@@ -152,7 +162,7 @@ public class EndGame implements ActionListener {
 		if (alpha2 > 0.6f)
 			alpha2 = 0.6f;
 		color1 = new Color(0, 0, 0, alpha2);
-		color2 = new Color(100, 0, 75, alpha);
+		color2 = new Color(240, 240, 240, alpha);
 		y++;
 		if (y > 60)
 			y = 60;
