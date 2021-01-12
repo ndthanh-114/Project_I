@@ -1,21 +1,29 @@
 package endgame;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.io.File;
 import java.io.IOException;
-
+import java.util.Hashtable;
+import java.util.Map;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import javax.imageio.ImageIO;
@@ -35,8 +43,9 @@ public class EndGame implements ActionListener {
 	Rectangle2D rectQuitGame;
 	int alpha = 30;
 	float alpha2 = 0.2f;
-	Font font = new Font("Tahoma", Font.BOLD, 60);
+	Font font = new Font("Algerian", Font.BOLD, 60);
 	Color color1, color2, color3, color4;
+	GradientPaint gp;
 	BufferedImage bufBackground;
 	BufferedImage bluri;
 	Tetris tetris;
@@ -58,6 +67,8 @@ public class EndGame implements ActionListener {
 		color2 = new Color(240, 240, 240, alpha);
 		color3 = new Color(240, 240, 240, 180);
 		color4 = new Color(240, 240, 240, 180);
+		gp = new GradientPaint(5, 25, 
+	            new Color(0,255,0,alpha), 2, 2, new Color(255,0,0,alpha), true);
 		rectNewGame = new Rectangle2D.Float();
 		rectQuitGame = new Rectangle2D.Float();
 //		this.setPreferredSize(new Dimension(Tetris.PANEL_WIDTH_GAME, Tetris.PANEL_HEIGHt_GAME));
@@ -107,15 +118,23 @@ public class EndGame implements ActionListener {
 
 		Graphics2D g2d = (Graphics2D) g.create();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setColor(color2);
+		g2d.setPaint(gp);
+//		
+		Map<TextAttribute, Object> map =
+			    new Hashtable<TextAttribute, Object>();
+		map.put(TextAttribute.KERNING,TextAttribute.KERNING_ON);
+		 map.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+		font = font.deriveFont(map);
 		g2d.setFont(font);
+			
 		FontMetrics fm = g2d.getFontMetrics();
 
 		int stringWidth = fm.stringWidth(gameOver);
 
 		g2d.drawString(gameOver, (Tetris.PANEL_WIDTH_GAME - stringWidth) / 2, Tetris.PANEL_HEIGHt_GAME / 2 - (120 - y));
 		
-
+       
+		
 		g2d.dispose();
 
 		Graphics2D gd = (Graphics2D) g.create();
@@ -149,7 +168,7 @@ public class EndGame implements ActionListener {
 		gd.dispose();
 		
 	}
-
+	int m=0;
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -161,9 +180,15 @@ public class EndGame implements ActionListener {
 			alpha2 = 0.6f;
 		color1 = new Color(0, 0, 0, alpha2);
 		color2 = new Color(240, 240, 240, alpha);
+		gp = new GradientPaint(5, 25, 
+	            new Color(255,0,0,alpha).brighter(), 2, 2, new Color(255,255,0,alpha).brighter(), true);
 		y++;
-		if (y > 60)
+		if (y > 60) {
 			y = 60;
+			gp = new GradientPaint(5, 25+(int)(m%15), 
+	            new Color(255,0,0,alpha).brighter(), 2, 2, new Color(255,255,0,alpha).brighter(), true);
+			m++;
+		}
 
 	}
 
